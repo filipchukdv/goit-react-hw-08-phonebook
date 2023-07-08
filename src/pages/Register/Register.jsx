@@ -3,7 +3,7 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
@@ -11,9 +11,11 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { toast } from 'react-hot-toast';
 import { signUp } from 'api/auth';
+import { useDispatch } from 'react-redux';
+import { loginThunk } from 'redux/auth/thunk';
 
 const Register = () => {
-  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const handleSubmit = event => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -23,7 +25,12 @@ const Register = () => {
         email: data.get('email'),
         password: data.get('password'),
       }).then(() => {
-        navigate('/login');
+        dispatch(
+          loginThunk({
+            email: data.get('email'),
+            password: data.get('password'),
+          })
+        );
       }),
       {
         loading: 'Loading',
